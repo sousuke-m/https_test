@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<div class="background"></div>
+<iframe id="player" width="640" height="360" src="" title="Yotube.com" frameborder="1"></iframe>
+<script>
+const video_id_list_ = `_,svdbwvPWCj8,fymGSwYac9Y,ZDAmgTh15Qc`;
+localStorage.setItem("video_id_list",video_id_list_);
+localStorage.setItem("n",1);
+next_video();
+function next_video(){
+    var video_id_list = localStorage.getItem("video_id_list");
+    var n = localStorage.getItem("n");
+    var video_id_list__ = video_id_list.split(",");
+    if(video_id_list__.length < n){
+        document.querySelector("#player").src = "end.html";
+    }else{
+        document.querySelector("#player").src = `https://www.youtube.com/embed/${video_id_list__[n]}`;
+    }
+    localStorage.setItem("n",n+1);
+}
+function onYouTubeIframeAPIReady() {
+    const player = new YT.Player('player', {
+        events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+        }
+    });
+}
+function onPlayerReady(e) {
+    console.log('ready');
+}
+function onPlayerStateChange(e) {
+    if (e.data == YT.PlayerState.ENDED) {
+        console.log('end');
+        next_video();
+    } else if (e.data == YT.PlayerState.PLAYING) {
+        console.log('playing');
+    } else if (e.data == YT.PlayerState.PAUSED) {
+    } else if (e.data == YT.PlayerState.BUFFERING) {
+    } else if (e.data == YT.PlayerState.CUED) {
+    }
+}
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
